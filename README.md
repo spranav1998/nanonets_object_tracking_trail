@@ -1,6 +1,9 @@
 ## Object Tracking
 Installation: Use this command to install all the necessary packages. Note that we are using ```python3```
 
+Modified Version of Repo found on this blog for personal project.
+
+Instruction are provided inside readme.txt
 Link to the blog [click here](https://blog.nanonets.com/object-tracking-deepsort/)
 ```sh
 pip install -r requirements.txt
