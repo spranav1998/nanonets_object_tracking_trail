@@ -76,21 +76,21 @@ def get_mask(filename):
 if __name__ == '__main__':
 	
 	#Load detections for the video. Options available: yolo,ssd and mask-rcnn
-	filename = 'det/det_ssd512.txt'
+	filename = './media/img1/gt/det.txt'
 	gt_dict = get_dict(filename)
 
-	cap = cv2.VideoCapture('vdo.avi')
+	cap = cv2.VideoCapture('./media/video.avi')
 
 	#an optional mask for the given video, to focus on the road. 
-	mask = get_mask('roi.jpg')
+	#mask = get_mask('roi.jpg')
 
 	#Initialize deep sort.
-	deepsort = deepsort_rbc()
+	deepsort = deepsort_rbc(wt_path='./ckpts/effmodel40.pt')
 
 	frame_id = 1
 
-	mask = np.expand_dims(mask,2)
-	mask = np.repeat(mask,3,2)
+	#mask = np.expand_dims(mask,2)
+	#mask = np.repeat(mask,3,2)
 
 	fourcc = cv2.VideoWriter_fourcc(*'XVID')
 	out = cv2.VideoWriter('ssd_out_3.avi',fourcc, 10.0, (1920,1080))
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 			frame_id+=1
 			break	
 
-		frame = frame * mask
+		#frame = frame
 		frame = frame.astype(np.uint8)
 
 		detections,out_scores = get_gt(frame,frame_id,gt_dict)
