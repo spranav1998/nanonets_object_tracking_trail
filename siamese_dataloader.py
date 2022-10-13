@@ -169,15 +169,15 @@ if __name__ == '__main__':
 	# if this file is executed, it will run the main function and dump a image showing randomly selected
 	# anchor, positive and negative sample
 	class Config():
-		training_dir = "/media/ADAS1/MARS/bbox_train/bbox_train/"
-		testing_dir = "/media/ADAS1/MARS/bbox_test/bbox_test/"
+		training_dir = "/content/market1501/bounding_box_train/"
+		testing_dir = "/content/market1501/bounding_box_test/"
 		train_batch_size = 64
-		train_number_epochs = 100	
+		train_number_epochs = 50	
 	
 	folder_dataset = dset.ImageFolder(root=Config.training_dir)
 
 	transforms = torchvision.transforms.Compose([
-	torchvision.transforms.Resize((256,128)), #Important. make size= 128
+	torchvision.transforms.Resize((128,128)), #Important. make size= 128
 	torchvision.transforms.ColorJitter(hue=.05, saturation=.05),
 	torchvision.transforms.RandomHorizontalFlip(),
 	torchvision.transforms.RandomRotation(20, resample=PIL.Image.BILINEAR),

@@ -27,15 +27,15 @@ Get training data
 """
 
 class Config():
-	training_dir = "/media/ADAS1/MARS/bbox_train/bbox_train/"
-	testing_dir = "/media/ADAS1/MARS/bbox_test/bbox_test/"
+	training_dir = "/content/market1501/bounding_box_train/" #Change the path
+	testing_dir = "/content/market1501/bounding_box_test/" # Change the path
 	train_batch_size = 128
-	train_number_epochs = 100	
+	train_number_epochs = 50	
 
 folder_dataset = dset.ImageFolder(root=Config.training_dir)
 
 transforms = torchvision.transforms.Compose([
-	torchvision.transforms.Resize((256,128)),
+	torchvision.transforms.Resize((128,128)),
 	torchvision.transforms.ColorJitter(hue=.05, saturation=.05),
 	torchvision.transforms.RandomHorizontalFlip(),
 	torchvision.transforms.RandomRotation(20, resample=PIL.Image.BILINEAR),
@@ -45,8 +45,8 @@ transforms = torchvision.transforms.Compose([
 
 def get_gaussian_mask():
 	#128 is image size
-	# We will be using 256x128 patch instead of original 128x128 path because we are using for pedestrain with 1:2 AR.
-	x, y = np.mgrid[0:1.0:256j, 0:1.0:128j] #128 is input size.
+	# We will be using 128x128 patch instead of original 128x128 path because we are using for pedestrain with 1:2 AR.
+	x, y = np.mgrid[0:1.0:128j, 0:1.0:128j] #128 is input size.
 	xy = np.column_stack([x.flat, y.flat])
 	mu = np.array([0.5,0.5])
 	sigma = np.array([0.22,0.22])
@@ -98,16 +98,15 @@ for epoch in range(0,Config.train_number_epochs):
 		triplet_loss.backward() # Backward propagation to get the gradients w.r.t. model weights
 		optimizer.step() # Model weights updation using calculated gradient and Adam optimizer
 
-		if i %10 == 0 : # Print logs after every 10 iterations
-			#TODO: Update with tqdm based log printing for better training monitoring
+		if i %20 == 0 : # Print logs after every 20 iterations
 			print("Epoch number {}\n Current loss {}\n".format(epoch,triplet_loss.item()))
-			iteration_number +=10
+			iteration_number +=20
 			counter.append(iteration_number)
 			loss_history.append(triplet_loss.item())
 	if epoch%20==0: # Model will be saved after every 20 epochs
 		if not os.path.exists('ckpts/'):
 			os.mkdir('ckpts')
-		torch.save(net,'ckpts/model'+str(epoch)+'.pt')
+		torch.save(net,'ckpts/effmodel'+str(epoch)+'.pt')
 
 # Loss curve plot to be dumped after full model training. 
 show_plot(counter,loss_history,path='ckpts/loss.png')

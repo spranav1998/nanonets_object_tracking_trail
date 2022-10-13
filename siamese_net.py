@@ -13,7 +13,7 @@ import PIL.ImageOps
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
-
+from torchvision.models import efficientnet_b0
 
 
 class SiameseNetwork(nn.Module):
@@ -21,43 +21,7 @@ class SiameseNetwork(nn.Module):
         super(SiameseNetwork, self).__init__()
 
         #Outputs batch X 512 X 1 X 1 
-        self.net = nn.Sequential(
-            nn.Conv2d(3,32,kernel_size=3,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(32),
-            #nn.Dropout2d(p=0.4),
-
-            nn.Conv2d(32,64,kernel_size=3,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(64),
-            #nn.Dropout2d(p=0.4),
-
-            nn.Conv2d(64,128,kernel_size=3,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(128),
-            #nn.Dropout2d(p=0.4),            
-
-
-            nn.Conv2d(128,256,kernel_size=1,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(256),
-            #nn.Dropout2d(p=0.4),
-
-            nn.Conv2d(256,256,kernel_size=1,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(256),
-            #nn.Dropout2d(p=0.4),    
-
-            nn.Conv2d(256,512,kernel_size=3,stride=2),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(512),    
-
-            #1X1 filters to increase dimensions
-            nn.Conv2d(512,1024,kernel_size=1,stride=1),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(1024),    
-
-            )
+        self.net = efficientnet_b0()
 
 
     def forward_once(self, x):
